@@ -1,12 +1,17 @@
 package enginee
 
-type Request struct{
-	URL string
-	parserFunc  func () RequestResult
+type Request struct {
+	URL        string
+	ParserFunc func([]byte) ParserResult
 }
 
-type RequestResult struct {
-	requests []Request
-	items [] interface{}
+type ParserResult struct {
+	Requests []Request
+	Items    [] interface{}
 }
+
+func NilParserFunc(b []byte) ParserResult {
+	return ParserResult{}
+}
+
 
