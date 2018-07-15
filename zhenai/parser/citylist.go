@@ -14,7 +14,7 @@ func ParserCityList(b []byte) enginee.ParserResult {
 		result.Items = append(result.Items, string(match[2]))
 		result.Requests = append(result.Requests, enginee.Request{
 			URL: string(match[1]),
-			ParserFunc: enginee.NilParserFunc,
+			ParserFunc: ParserCity,
 		})
 	}
 	return result
