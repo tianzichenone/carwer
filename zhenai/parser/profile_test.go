@@ -6,7 +6,7 @@ import (
 )
 
 func TestParserProfile(t *testing.T) {
-	contents, err := fetcher.Fetcher("http://album.zhenai.com/u/1678110663")
+	contents, err := fetcher.Fetcher("http://album.zhenai.com/u/1558719774")
 	if err != nil {
 		panic(err)
 	}
