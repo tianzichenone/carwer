@@ -3,7 +3,6 @@ package parser
 import (
 	"regexp"
 	"carwer/enginee"
-	"fmt"
 	"carwer/model"
 	"strconv"
 )
@@ -18,13 +17,14 @@ var placeRe = regexp.MustCompile(`<td><span class="label">工作地：</span>([^
 var hukouRe = regexp.MustCompile(`<td><span class="label">籍贯：</span>([^<]+)</td>`)
 var constellationRe = regexp.MustCompile(`<td><span class="label">星座：</span>([^<]+)</td>`)
 
-func ParserProfile(b []byte) enginee.ParserResult {
+func ParserProfile(b []byte, name string) enginee.ParserResult {
 	parserResult := enginee.ParserResult{}
 	profile := model.Profile{}
 	age, err := strconv.Atoi(fetchProfileInfo(ageRe, b))
 	if err != nil {
 		age = 0
 	}
+	profile.Name = name
 	profile.Age = age
 	profile.Height = fetchProfileInfo(heightRe, b)
 	profile.Income = fetchProfileInfo(incomeRe, b)
@@ -35,11 +35,14 @@ func ParserProfile(b []byte) enginee.ParserResult {
 	profile.Hukou = fetchProfileInfo(hukouRe, b)
 	profile.Constellation = fetchProfileInfo(constellationRe, b)
 	parserResult.Items = append(parserResult.Items, profile)
-	fmt.Printf("%v\n", profile)
 	return parserResult
 }
 
 func fetchProfileInfo(re *regexp.Regexp, contents []byte) string {
 	match := re.FindSubmatch(contents)
-	return string(match[1])
+	if len(match) == 2 {
+		return string(match[1])
+	}else {
+		return ""
+	}
 }

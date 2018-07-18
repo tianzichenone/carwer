@@ -1,14 +1,18 @@
 package main
 
 import (
-	"carwer/enginee"
 	"carwer/zhenai/parser"
+	"carwer/enginee"
+	"carwer/scheduler"
 )
 
 func main() {
-	enginee.Run(enginee.Request{
+	enginee.Concurrency{
+		Scheduler: &scheduler.SimpleScheduler{},
+		WorkCount: 100,
+
+	}.Run(enginee.Request{
 		URL: "http://www.zhenai.com/zhenghun",
 		ParserFunc: parser.ParserCityList,
 	})
-
 }

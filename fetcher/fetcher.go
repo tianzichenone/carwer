@@ -9,16 +9,17 @@ import (
 	"io/ioutil"
 	"fmt"
 	"golang.org/x/text/encoding/unicode"
+	"github.com/emicklei/go-restful/log"
 )
 
 func Fetcher(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("Getting wroing http code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("Getting wrong http code: %d", resp.StatusCode)
 	}
 	newReader := bufio.NewReader(resp.Body)
 	utfEcoding := determineEncoding(newReader)
@@ -29,6 +30,7 @@ func Fetcher(url string) ([]byte, error) {
 func determineEncoding(r *bufio.Reader) encoding.Encoding {
 	contents, err := r.Peek(1024)
 	if err != nil {
+		log.Printf("Fetcher error:%v", err)
 		return unicode.UTF8
 	}
 	e, _, _ := charset.DetermineEncoding(contents, "")

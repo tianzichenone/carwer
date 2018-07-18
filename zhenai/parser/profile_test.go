@@ -2,14 +2,13 @@ package parser
 
 import (
 	"testing"
-	"carwer/fetcher"
+	"io/ioutil"
 )
 
 func TestParserProfile(t *testing.T) {
-	contents, err := fetcher.Fetcher("http://album.zhenai.com/u/1558719774")
+	contents, err := ioutil.ReadFile("profile_test_data")
 	if err != nil {
 		panic(err)
 	}
-	ParserProfile(contents)
-
+	ParserProfile(contents, "")
 }
