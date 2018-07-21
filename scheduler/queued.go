@@ -15,8 +15,8 @@ func (q *QueuedScheduler) WorkReady(work chan enginee.Request) {
 	q.WorkChan <- work
 }
 
-func (s *QueuedScheduler) ConfigMasterWorkChan(work chan enginee.Request) {
-	panic("Not implement")
+func (q *QueuedScheduler) CreateWorkChan() chan enginee.Request {
+	return make(chan enginee.Request)
 }
 
 func (q *QueuedScheduler) Scheduler() {

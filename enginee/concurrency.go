@@ -10,10 +10,14 @@ type Concurrency struct {
 }
 
 type Scheduler interface {
+	WorkNotify
 	Submit(Request)
-	ConfigMasterWorkChan(chan Request)
-	WorkReady(chan Request)
+	CreateWorkChan() chan Request
 	Scheduler()
+}
+
+type WorkNotify interface {
+	WorkReady(chan Request)
 }
 
 func (c Concurrency) Run(seds ...Request) {
@@ -21,7 +25,7 @@ func (c Concurrency) Run(seds ...Request) {
 	out := make(chan ParserResult)
 	c.Scheduler.Scheduler()
 	for i := 0; i < c.WorkCount; i ++ {
-		c.createWorker(out, c.Scheduler)
+		c.createWorker(c.Scheduler.CreateWorkChan(), out, c.Scheduler)
 	}
 
 	for _, req := range seds {
@@ -40,13 +44,12 @@ func (c Concurrency) Run(seds ...Request) {
 
 }
 
-func (c Concurrency) createWorker(out chan ParserResult, s Scheduler) {
-	in := make(chan Request)
+func (c Concurrency) createWorker(in chan Request, out chan ParserResult, n WorkNotify) {
 	go func() {
 		for {
 			// workers should pass their request chan
-			s.WorkReady(in)
-			request := <- in
+			n.WorkReady(in)
+			request := <-in
 			result, err := Work(request)
 			if err != nil {
 				continue

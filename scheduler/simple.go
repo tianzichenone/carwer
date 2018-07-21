@@ -14,7 +14,15 @@ func (s *SimpleScheduler) Submit(req enginee.Request) {
 	}()
 }
 
-func (s *SimpleScheduler) ConfigMasterWorkChan(work chan enginee.Request) {
-	s.WorkChan = work
+func (s *SimpleScheduler) CreateWorkChan() chan enginee.Request {
+	return s.WorkChan
+}
+
+func (s *SimpleScheduler) Scheduler() {
+	s.WorkChan = make(chan enginee.Request)
+}
+
+func (s *SimpleScheduler) WorkReady(chan enginee.Request) {
+
 }
 
