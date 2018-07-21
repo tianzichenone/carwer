@@ -12,16 +12,16 @@ type Concurrency struct {
 type Scheduler interface {
 	Submit(Request)
 	ConfigMasterWorkChan(chan Request)
+	WorkReady(chan Request)
+	Scheduler()
 }
 
 func (c Concurrency) Run(seds ...Request) {
 
-	in := make(chan Request)
 	out := make(chan ParserResult)
-	c.Scheduler.ConfigMasterWorkChan(in)
-
+	c.Scheduler.Scheduler()
 	for i := 0; i < c.WorkCount; i ++ {
-		c.createWorker(in, out)
+		c.createWorker(out, c.Scheduler)
 	}
 
 	for _, req := range seds {
@@ -40,9 +40,12 @@ func (c Concurrency) Run(seds ...Request) {
 
 }
 
-func (c Concurrency) createWorker(in chan Request, out chan ParserResult) {
+func (c Concurrency) createWorker(out chan ParserResult, s Scheduler) {
+	in := make(chan Request)
 	go func() {
 		for {
+			// workers should pass their request chan
+			s.WorkReady(in)
 			request := <- in
 			result, err := Work(request)
 			if err != nil {
