@@ -16,8 +16,9 @@ var occupationRe = regexp.MustCompile(`<td><span class="label">职业： </span>
 var placeRe = regexp.MustCompile(`<td><span class="label">工作地：</span>([^<]+)</td>`)
 var hukouRe = regexp.MustCompile(`<td><span class="label">籍贯：</span>([^<]+)</td>`)
 var constellationRe = regexp.MustCompile(`<td><span class="label">星座：</span>([^<]+)</td>`)
+var urlIdRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)]`)
 
-func ParserProfile(b []byte, name string) enginee.ParserResult {
+func ParserProfile(b []byte, name, url string) enginee.ParserResult {
 	parserResult := enginee.ParserResult{}
 	profile := model.Profile{}
 	age, err := strconv.Atoi(fetchProfileInfo(ageRe, b))
@@ -34,7 +35,13 @@ func ParserProfile(b []byte, name string) enginee.ParserResult {
 	profile.Place = fetchProfileInfo(placeRe, b)
 	profile.Hukou = fetchProfileInfo(hukouRe, b)
 	profile.Constellation = fetchProfileInfo(constellationRe, b)
-	parserResult.Items = append(parserResult.Items, profile)
+	parserResult.Items = append(parserResult.Items, model.Item{
+		URL: url,
+		ID:  fetchProfileInfo(urlIdRe, []byte(url)),
+		Playload: profile,
+		TYPE: "zhenai",
+
+	})
 	return parserResult
 }
 
@@ -42,7 +49,7 @@ func fetchProfileInfo(re *regexp.Regexp, contents []byte) string {
 	match := re.FindSubmatch(contents)
 	if len(match) == 2 {
 		return string(match[1])
-	}else {
+	} else {
 		return ""
 	}
 }

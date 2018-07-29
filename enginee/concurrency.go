@@ -1,12 +1,14 @@
 package enginee
 
 import (
-	"log"
+	//"log"
 )
+import "carwer/model"
 
 type Concurrency struct {
 	Scheduler Scheduler
 	WorkCount int
+	ItemChan chan model.Item
 }
 
 type Scheduler interface {
@@ -38,7 +40,10 @@ func (c Concurrency) Run(seds ...Request) {
 			c.Scheduler.Submit(req)
 		}
 		for _, item := range result.Items {
-			log.Printf("Get item: %v", item)
+			//log.Printf("Get item: %v", item)
+			go func () {
+				c.ItemChan <- item
+			}()
 		}
 	}
 

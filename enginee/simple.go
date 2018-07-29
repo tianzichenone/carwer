@@ -29,9 +29,9 @@ func (s Simple) Run(seds ...Request) {
 
 func Work(req Request) (ParserResult, error) {
 	contents, err := fetcher.Fetcher(req.URL)
-	log.Printf("Fetching Url: %s", req.URL)
+	//log.Printf("Fetching Url: %s", req.URL)
 	if err != nil {
-		log.Printf("Fetch URL: %s error: %v", req.URL, err)
+		//log.Printf("Fetch URL: %s error: %v", req.URL, err)
 		return ParserResult{}, err
 	}
 	parserResults := req.ParserFunc(contents)
