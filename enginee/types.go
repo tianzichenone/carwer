@@ -2,9 +2,11 @@ package enginee
 
 import "carwer/model"
 
+type ParserFunc func(contents []byte, url string) ParserResult
+
 type Request struct {
 	URL        string
-	ParserFunc func([]byte) ParserResult
+	ParserFunc ParserFunc
 }
 
 type ParserResult struct {

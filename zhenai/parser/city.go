@@ -11,17 +11,13 @@ var (
 	otherRe = regexp.MustCompile(`<a target="_blank" href="(http://www.zhenai.com/zhenghun/[^>]+)">([^<]+)</a>`)
 )
 
-func ParserCity(b []byte) enginee.ParserResult {
+func ParserCity(b []byte, url string) enginee.ParserResult {
 	parserResult := enginee.ParserResult{}
 	for _, match := range profileRe.FindAllSubmatch(b, -1) {
-		name := string(match[2])
-		url  := string(match[1])
 		//parserResult.Items = append(parserResult.Items, string(match[2]))
 		parserResult.Requests = append(parserResult.Requests, enginee.Request{
 			URL: string(match[1]),
-			ParserFunc: func(contents []byte) enginee.ParserResult {
-				return ParserProfile(contents, name, url)
-			},
+			ParserFunc: CreateParerFunc(string(match[2])),
 		})
 	}
 	for _, match := range nextRe.FindAllSubmatch(b, -1) {
@@ -38,7 +34,13 @@ func ParserCity(b []byte) enginee.ParserResult {
 			ParserFunc: ParserCity,
 		})
 	}
-	parserResult.Items = append(parserResult.Items)
+	//parserResult.Items = append(parserResult.Items)
 	return parserResult
 
+}
+
+func CreateParerFunc(name string) func([]byte, string) enginee.ParserResult {
+	return func(contents []byte, url string) enginee.ParserResult {
+		return ParserProfile(contents, name, url)
+	}
 }

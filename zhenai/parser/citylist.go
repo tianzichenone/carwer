@@ -7,7 +7,7 @@ import (
 
 var cityListRe = regexp.MustCompile(`<a href="(http://www.zhenai.com/zhenghun/[a-z0-9]+)"[^>]*>([^<]+)</a>`)
 
-func ParserCityList(b []byte) enginee.ParserResult {
+func ParserCityList(b []byte, _ string) enginee.ParserResult {
 	matches := cityListRe.FindAllSubmatch(b, -1)
 	result := enginee.ParserResult{}
 	for _, match := range matches {
@@ -17,7 +17,7 @@ func ParserCityList(b []byte) enginee.ParserResult {
 			ParserFunc: ParserCity,
 		})
 	}
-	result.Items = append(result.Items)
+	//result.Items = append(result.Items)
 	return result
 
 }

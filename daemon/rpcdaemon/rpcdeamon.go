@@ -12,7 +12,7 @@ type Args struct {
 
 func (s RpcDaemonService) Divide(args Args, result *float64) error {
 	if args.B == 0 {
-		return fmt.Errorf("Divide zero error")
+		return fmt.Errorf("Divide zero error: %f / %f", args.A, args.B)
 	}
 	*result = float64(args.A) / float64(args.B)
 	return nil

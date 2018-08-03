@@ -16,7 +16,7 @@ var occupationRe = regexp.MustCompile(`<td><span class="label">职业： </span>
 var placeRe = regexp.MustCompile(`<td><span class="label">工作地：</span>([^<]+)</td>`)
 var hukouRe = regexp.MustCompile(`<td><span class="label">籍贯：</span>([^<]+)</td>`)
 var constellationRe = regexp.MustCompile(`<td><span class="label">星座：</span>([^<]+)</td>`)
-var urlIdRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)]`)
+var urlIdRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 
 func ParserProfile(b []byte, name, url string) enginee.ParserResult {
 	parserResult := enginee.ParserResult{}
