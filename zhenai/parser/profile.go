@@ -1,9 +1,9 @@
 package parser
 
 import (
-	"regexp"
 	"carwer/enginee"
 	"carwer/model"
+	"regexp"
 	"strconv"
 )
 
@@ -18,7 +18,7 @@ var hukouRe = regexp.MustCompile(`<td><span class="label">籍贯：</span>([^<]+
 var constellationRe = regexp.MustCompile(`<td><span class="label">星座：</span>([^<]+)</td>`)
 var urlIdRe = regexp.MustCompile(`http://album.zhenai.com/u/([\d]+)`)
 
-func ParserProfile(b []byte, name, url string) enginee.ParserResult {
+func parserProfile(b []byte, name, url string) enginee.ParserResult {
 	parserResult := enginee.ParserResult{}
 	profile := model.Profile{}
 	age, err := strconv.Atoi(fetchProfileInfo(ageRe, b))
@@ -36,11 +36,10 @@ func ParserProfile(b []byte, name, url string) enginee.ParserResult {
 	profile.Hukou = fetchProfileInfo(hukouRe, b)
 	profile.Constellation = fetchProfileInfo(constellationRe, b)
 	parserResult.Items = append(parserResult.Items, model.Item{
-		URL: url,
-		ID:  fetchProfileInfo(urlIdRe, []byte(url)),
+		URL:      url,
+		ID:       fetchProfileInfo(urlIdRe, []byte(url)),
 		Playload: profile,
-		TYPE: "zhenai",
-
+		TYPE:     "zhenai",
 	})
 	return parserResult
 }

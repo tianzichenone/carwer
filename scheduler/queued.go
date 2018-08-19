@@ -24,7 +24,7 @@ func (q *QueuedScheduler) Scheduler() {
 		q.RequestChan = make(chan enginee.Request)
 		q.WorkChan = make(chan chan enginee.Request)
 		requestQueue := []enginee.Request{}
-		workChanQueue := [] chan enginee.Request{}
+		workChanQueue := []chan enginee.Request{}
 		for {
 			var receiveRequest enginee.Request
 			var readyWorkChan chan enginee.Request
@@ -44,4 +44,3 @@ func (q *QueuedScheduler) Scheduler() {
 		}
 	}()
 }
-

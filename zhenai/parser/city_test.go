@@ -1,9 +1,9 @@
 package parser
 
 import (
-	"testing"
 	"carwer/fetcher"
 	"fmt"
+	"testing"
 )
 
 func TestCityParser(t *testing.T) {

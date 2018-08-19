@@ -1,15 +1,15 @@
 package fetcher
 
 import (
-	"net/http"
 	"bufio"
+	"fmt"
+	"github.com/emicklei/go-restful/log"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
+	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 	"io/ioutil"
-	"fmt"
-	"golang.org/x/text/encoding/unicode"
-	"github.com/emicklei/go-restful/log"
+	"net/http"
 )
 
 func Fetcher(url string) ([]byte, error) {
@@ -36,4 +36,3 @@ func determineEncoding(r *bufio.Reader) encoding.Encoding {
 	e, _, _ := charset.DetermineEncoding(contents, "")
 	return e
 }
-

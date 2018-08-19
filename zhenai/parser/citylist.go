@@ -13,8 +13,8 @@ func ParserCityList(b []byte, _ string) enginee.ParserResult {
 	for _, match := range matches {
 		//result.Items = append(result.Items, string(match[2]))
 		result.Requests = append(result.Requests, enginee.Request{
-			URL: string(match[1]),
-			ParserFunc: ParserCity,
+			URL:    string(match[1]),
+			Parser: enginee.NewParserFuncFactory("ParserCity", ParserCity),
 		})
 	}
 	//result.Items = append(result.Items)

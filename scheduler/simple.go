@@ -25,4 +25,3 @@ func (s *SimpleScheduler) Scheduler() {
 func (s *SimpleScheduler) WorkReady(chan enginee.Request) {
 
 }
-

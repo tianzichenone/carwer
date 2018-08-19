@@ -5,8 +5,8 @@ import (
 )
 
 type Simple struct {
-
 }
+
 func (s Simple) Run(seds ...Request) {
 	requests := []Request{}
 	for _, request := range seds {
@@ -22,8 +22,6 @@ func (s Simple) Run(seds ...Request) {
 		for _, item := range parserResult.Items {
 			log.Printf("Get item: %v", item)
 		}
-		requests = append(requests, parserResult.Requests ...)
+		requests = append(requests, parserResult.Requests...)
 	}
 }
-
-

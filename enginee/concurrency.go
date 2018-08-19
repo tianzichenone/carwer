@@ -1,15 +1,20 @@
 package enginee
 
 import (
-	//"log"
+//"log"
 )
-import "carwer/model"
+import (
+	"carwer/model"
+)
 
 type Concurrency struct {
-	Scheduler Scheduler
-	WorkCount int
-	ItemChan chan model.Item
+	Scheduler     Scheduler
+	WorkCount     int
+	ItemChan      chan model.Item
+	WorkerProcess CrawerProcess
 }
+
+type CrawerProcess func(Request) (ParserResult, error)
 
 type Scheduler interface {
 	WorkNotify
@@ -22,11 +27,11 @@ type WorkNotify interface {
 	WorkReady(chan Request)
 }
 
-func (c Concurrency) Run(seds ...Request) {
+func (c *Concurrency) Run(seds ...Request) {
 
 	out := make(chan ParserResult)
 	c.Scheduler.Scheduler()
-	for i := 0; i < c.WorkCount; i ++ {
+	for i := 0; i < c.WorkCount; i++ {
 		c.createWorker(c.Scheduler.CreateWorkChan(), out, c.Scheduler)
 	}
 
@@ -41,7 +46,7 @@ func (c Concurrency) Run(seds ...Request) {
 		}
 		for _, item := range result.Items {
 			//log.Printf("Get item: %v", item)
-			go func () {
+			go func() {
 				c.ItemChan <- item
 			}()
 		}
@@ -49,13 +54,13 @@ func (c Concurrency) Run(seds ...Request) {
 
 }
 
-func (c Concurrency) createWorker(in chan Request, out chan ParserResult, n WorkNotify) {
+func (c *Concurrency) createWorker(in chan Request, out chan ParserResult, n WorkNotify) {
 	go func() {
 		for {
 			// workers should pass their request chan
 			n.WorkReady(in)
 			request := <-in
-			result, err := Work(request)
+			result, err := c.WorkerProcess(request)
 			if err != nil {
 				continue
 			}

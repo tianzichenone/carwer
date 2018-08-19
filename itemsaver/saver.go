@@ -1,11 +1,11 @@
 package itemsaver
 
 import (
-	"log"
 	"carwer/model"
-	"fmt"
 	"context"
+	"fmt"
 	"gopkg.in/olivere/elastic.v5"
+	"log"
 )
 
 func MakeItermSaver() chan model.Item {
@@ -27,7 +27,6 @@ func MakeItermSaver() chan model.Item {
 	}()
 	return ItemChan
 }
-
 
 // when we do call in local
 func save(item model.Item, client *elastic.Client) {

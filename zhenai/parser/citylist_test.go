@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"testing"
 	"io/ioutil"
+	"testing"
 )
 
 func TestCityListParser(t *testing.T) {
@@ -10,7 +10,7 @@ func TestCityListParser(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	expected_city := [] string{
+	expected_city := []string{
 		"阿坝", "阿克苏", "阿拉善盟",
 	}
 	expected_url := []string{
@@ -22,7 +22,7 @@ func TestCityListParser(t *testing.T) {
 	for i, city := range expected_city {
 		if city != result.Items[i] {
 			t.Errorf(
-				"Expected city :%s," +
+				"Expected city :%s,"+
 					" but atctual city : %s",
 				city, result.Items[i])
 		}
